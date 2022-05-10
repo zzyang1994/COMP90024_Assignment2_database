@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "== Set variables =="
-declare -a nodes=(115.146.95.1 115.146.95.136 103.6.254.220 115.146.92.127)
+declare -a nodes=(115.146.95.1 115.146.95.136 115.146.94.2 115.146.92.127)
 declare -a ports=(5984 5984 5984 5984)
 export master_node=115.146.95.1
 export master_port=5984

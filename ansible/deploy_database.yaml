@@ -19,5 +19,7 @@
     - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
   roles:
       - role: common
+        when: (ansible_hostname == "backend-test") or
+              (ansible_hostname == "frontend-test")
       - role: docker-pull-and-run
       - role: setup-cluster
