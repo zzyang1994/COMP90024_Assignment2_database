@@ -12,6 +12,8 @@ docker_image: couchdb:latest
 volumes:
   - vol_name: crawler-test-vol
     vol_size: 20
+  - vol_name: database-test-vol
+    vol_size: 20
 
 # Security group
 security_groups:
@@ -27,9 +29,29 @@ security_groups:
     port_range_min: 5984
     port_range_max: 5984
     remote_ip_prefix: 0.0.0.0/0
+  - name: database_test_http
+    description: "Database security group for HTTP"
+    protocol: tcp
+    port_range_min: 5986
+    port_range_max: 5986
+    remote_ip_prefix: 0.0.0.0/0
+  - name: database_test_http
+    description: "Database security group for HTTP"
+    protocol: tcp
+    port_range_min: 4369
+    port_range_max: 4369
+    remote_ip_prefix: 0.0.0.0/0
+  - name: database_test_http
+    description: "Database security group for HTTP"
+    protocol: tcp
+    port_range_min: 9100
+    port_range_max: 9200
+    remote_ip_prefix: 0.0.0.0/0
 
 # Instance
 instances:
   - name: crawler-test
     volumes: ['crawler-test-vol']
+  - name: database-test
+    volumes: ['database-test-vol']
 

@@ -2,7 +2,7 @@
 
 echo "== Set variables =="
 declare -a nodes=(115.146.95.1 115.146.95.136 103.6.254.220 115.146.92.244)
-declare -a ports=(5984 5984 5984)
+declare -a ports=(5984 5984 5984 5984)
 export master_node=115.146.95.1
 export master_port=5984
 export size=${#nodes[@]}
@@ -37,3 +37,11 @@ curl -X POST "http://${user}:${pass}@localhost:${master_port}/_cluster_setup" -H
 curl http://${user}:${pass}@localhost:${master_port}/_cluster_setup
 
 for port in "${ports[@]}"; do  curl -X GET http://${user}:${pass}@localhost:${port}/_membership; done
+
+for (( i=0; i<${size}; i++ )); do
+  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_config/httpd/enable_cors -d '"true"'
+  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_config/cors/origins -d '"*"'
+  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_config/cors/credentials -d '"true"'
+  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_config/cors/methods -d '"GET, PUT, POST, HEAD, DELETE"'
+  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_config/cors/headers -d '"accept, authorization, content-type, origin, referer, x-csrf-token"'
+done
