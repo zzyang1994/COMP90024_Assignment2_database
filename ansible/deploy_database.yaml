@@ -1,7 +1,7 @@
 ---
 - hosts: localhost
   vars_files:
-    - host_vars/backend-vars.yaml
+    - host_vars/database-vars.yaml
   gather_facts: true
   roles:
     - role: common
@@ -10,9 +10,9 @@
     - role: security-group
     - role: instance
 
-- hosts: backend-test
+- hosts: all
   vars_files:
-    - host_vars/backend-vars.yaml
+    - host_vars/database-vars.yaml
   gather_facts: true
   vars:
     - ansible_user: ubuntu
@@ -20,6 +20,4 @@
     - ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
   roles:
       - role: common
-      - role: docker-login
       - role: docker-pull-and-run
-      - role: docker-logout
