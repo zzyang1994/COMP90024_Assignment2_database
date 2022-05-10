@@ -1,8 +1,12 @@
 ---
-- name: Pull docker frontend image and run
+- name: Pull docker couchdb image and run
   become: true
   docker_container:
     image: '{{ docker_image }}'
-    name: frontend
+    name: couchdb
     published_ports: 5984:5984
-
+    env:
+      COUCHDB_USER: admin
+      COUCHDB_PASSWORD: password
+    volumes:
+      - ~/couchdb:/opt/couchdb/data

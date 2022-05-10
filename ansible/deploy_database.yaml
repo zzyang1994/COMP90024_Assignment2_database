@@ -21,3 +21,4 @@
   roles:
       - role: common
       - role: docker-pull-and-run
+      - role: setup-cluster

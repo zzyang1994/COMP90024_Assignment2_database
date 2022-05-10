@@ -4,14 +4,13 @@ instance_image: 356ff1ed-5960-4ac2-96a1-0c0198e6a999
 instance_key_name: zzyang
 instance_flavor: uom.mse.2c9g
 instance_network: qh2-uom
-inventory_dir: inventory/inventory.ini
 
 # Docker vars
 docker_image: couchdb:latest
 
 # Volume
 volumes:
-  - vol_name: database-test-vol
+  - vol_name: crawler-test-vol
     vol_size: 20
 
 # Security group
@@ -31,6 +30,6 @@ security_groups:
 
 # Instance
 instances:
-  - name: database-test
-    volumes: ['database-test-vol']
+  - name: crawler-test
+    volumes: ['crawler-test-vol']
 
