@@ -39,9 +39,9 @@ curl http://${user}:${pass}@localhost:${master_port}/_cluster_setup
 for port in "${ports[@]}"; do  curl -X GET http://${user}:${pass}@localhost:${port}/_membership; done
 
 for (( i=0; i<${size}; i++ )); do
-  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_config/httpd/enable_cors -d '"true"'
-  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_config/cors/origins -d '"*"'
-  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_config/cors/credentials -d '"true"'
-  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_config/cors/methods -d '"GET, PUT, POST, HEAD, DELETE"'
-  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_config/cors/headers -d '"accept, authorization, content-type, origin, referer, x-csrf-token"'
+  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_node/_local/_config/httpd/enable_cors -d '"true"'
+  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_node/_local/_config/cors/origins -d '"*"'
+  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_node/_local/_config/cors/credentials -d '"true"'
+  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_node/_local/_config/cors/methods -d '"GET, PUT, POST, HEAD, DELETE"'
+  curl -X PUT http://${user}:${pass}@localhost:${ports[${i}]}/_node/_local/_config/cors/headers -d '"accept, authorization, content-type, origin, referer, x-csrf-token"'
 done
