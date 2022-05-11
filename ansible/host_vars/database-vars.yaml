@@ -7,6 +7,7 @@ instance_network: qh2-uom
 
 # Docker vars
 docker_image: couchdb:latest
+cookie: a192aeb9904e6590849337933b000c99
 
 # Volume
 volumes:

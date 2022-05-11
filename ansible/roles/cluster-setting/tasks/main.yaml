@@ -1,0 +1,9 @@
+---
+# Set up couchdb cluster
+- name: Run a script to set up couchdb cluster
+  become: true
+  ansible.builtin.script: cluster-setting.sh
+  register: results
+
+- ansible.builtin.debug:
+    var: results.stdout

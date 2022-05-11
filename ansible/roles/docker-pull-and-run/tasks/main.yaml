@@ -3,7 +3,7 @@
   become: true
   community.docker.docker_container:
     image: '{{ docker_image }}'
-    name: couchdb
+    name: 'couchdb'
     ports: 
       - "5984:5984"
       - "5986:5986"
@@ -12,5 +12,8 @@
     env:
       COUCHDB_USER: admin
       COUCHDB_PASSWORD: password
+      NODENAME: '{{ ansible_default_ipv4.address }}'
+      COUCHDB_SECRET: '{{ cookie }}'
+      ERL_FLAGS: '-setcookie \"{{cookie}}" -name \"couchdb@{{ ansible_default_ipv4.address }}\"'
     volumes:
       - ~/couchdb:/opt/couchdb/data

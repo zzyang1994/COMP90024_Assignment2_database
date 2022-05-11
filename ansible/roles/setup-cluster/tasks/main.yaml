@@ -1,4 +1,0 @@
----
-# Set up couchdb cluster
-- name: Run a script to set up couchdb cluster
-  ansible.builtin.script: setup-cluster.sh
