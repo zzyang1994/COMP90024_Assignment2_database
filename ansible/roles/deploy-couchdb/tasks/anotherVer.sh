@@ -8,6 +8,8 @@ export pass='password'
 export VERSION='3.2.1'
 export cookie='a192aeb9904e6590849337933b000c99'
 
+echo "Current node: $1!"
+
 if [ ! -z $(docker ps --all --filter "name=couchdb*" --quiet) ] 
   then
     docker stop $(docker ps --all --filter "name=couchdb*" --quiet) 
@@ -18,11 +20,11 @@ fi
 docker pull ibmcom/couchdb3:${VERSION}
 
 docker create\
-  --name couchdb${ansible_default-ipv4.address}\
+  --name couchdb$1\
   --env COUCHDB_USER=${user}\
   --env COUCHDB_PASSWORD=${pass}\
   --env COUCHDB_SECRET=${cookie}\
-  --env ERL_FLAGS="-setcookie \"${cookie}\" -name \"couchdb@$(ansible_default_ipv4.address)\""\
+  --env ERL_FLAGS="-setcookie \"${cookie}\" -name \"couchdb@$1\""\
   --publish 5984:5984\
   --publish 5986:5986\
   --publish 4369:4369\
@@ -31,4 +33,4 @@ docker create\
 
 declare -a cont=(`docker ps --all | grep couchdb | cut -f1 -d' ' | xargs -n${size} -d'\n'`)
 
-docker start couchdb${ansible_default-ipv4.address}
+docker start couchdb$1

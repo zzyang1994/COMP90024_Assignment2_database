@@ -5,30 +5,45 @@ declare -a othernodes=`echo ${nodes[@]} | sed s/${masternode}//`
 export size=${#nodes[@]}
 export user='admin'
 export pass='password'
-export VERSION='3.2.1'
 export cookie='a192aeb9904e6590849337933b000c99'
 
-for node in ${othernodes} 
-do
+echo "Master node is ${masternode}!"
+echo "Current node: $1!"
+
+if [ "$1" != "${masternode}" ]
+  then
     curl -XPOST "http://${user}:${pass}@${masternode}:5984/_cluster_setup" \
       --header "Content-Type: application/json"\
       --data "{\"action\": \"enable_cluster\", \"bind_address\":\"0.0.0.0\",\
              \"username\": \"${user}\", \"password\":\"${pass}\", \"port\": \"5984\",\
-             \"remote_node\": \"${node}\", \"node_count\": \"$(echo ${nodes[@]} | wc -w)\",\
+             \"remote_node\": \"$1\", \"node_count\": \"$(echo ${nodes[@]} | wc -w)\",\
              \"remote_current_user\":\"${user}\", \"remote_current_password\":\"${pass}\"}"
-done
+fi
 
-for node in ${othernodes}
-do
+if [ "$1" != "${masternode}" ]
+  then
     curl -XPOST "http://${user}:${pass}@${masternode}:5984/_cluster_setup"\
       --header "Content-Type: application/json"\
-      --data "{\"action\": \"add_node\", \"host\":\"${node}\",\
+      --data "{\"action\": \"add_node\", \"host\":\"$1\",\
              \"port\": \"5984\", \"username\": \"${user}\", \"password\":\"${pass}\"}"
-done
+fi
 
 curl -XPOST "http://${user}:${pass}@${masternode}:5984/_cluster_setup"\
     --header "Content-Type: application/json" --data "{\"action\": \"finish_cluster\"}"
 
-curl -X GET "http://${user}:${pass}@${node}:5984/_membership"
+curl -X GET "http://${user}:${pass}@$1:5984/_membership"
 curl -XPUT "http://${user}:${pass}@${masternode}:5984/twitter"
-curl -X GET "http://${user}:${pass}@${node}:5984/_all_dbs"
+curl -X GET "http://${user}:${pass}@$1:5984/_all_dbs"
+
+echo "==Setting CORS=="
+curl -XPUT "http://${user}:${pass}@localhost:5984/_node/_local/_config/chttpd/enable_cors" --data '"true"'
+curl -XPUT "http://${user}:${pass}@localhost:5984/_node/_local/_config/cors/origins" --data '"*"'
+curl -XPUT "http://${user}:${pass}@localhost:5984/_node/_local/_config/cors/credentials" --data '"true"'
+curl -XPUT "http://${user}:${pass}@localhost:5984/_node/_local/_config/cors/methods" --data '"GET, PUT, POST, HEAD, DELETE"'
+curl -XPUT "http://${user}:${pass}@localhost:5984/_node/_local/_config/cors/headers" --data '"accept, authorization, content-type, origin, referer, x-csrf-token"'
+
+curl -XPUT "http://${user}:${pass}@localhost:5984/_node/couchdb@$1/_config/chttpd/enable_cors" --data '"true"'
+curl -XPUT "http://${user}:${pass}@localhost:5984/_node/couchdb@$1/_config/cors/origins" --data '"*"'
+curl -XPUT "http://${user}:${pass}@localhost:5984/_node/couchdb@$1/_config/cors/credentials" --data '"true"'
+curl -XPUT "http://${user}:${pass}@localhost:5984/_node/couchdb@$1/_config/cors/methods" --data '"GET, PUT, POST, HEAD, DELETE"'
+curl -XPUT "http://${user}:${pass}@localhost:5984/_node/couchdb@$1/_config/cors/headers" --data '"accept, authorization, content-type, origin, referer, x-csrf-token"'

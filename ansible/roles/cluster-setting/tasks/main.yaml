@@ -2,8 +2,8 @@
 # Set up couchdb cluster
 - name: Run a script to set up couchdb cluster
   become: true
-  ansible.builtin.script: cluster-setting.sh
+  ansible.builtin.script: cluster-setting.sh '{{ ansible_default_ipv4.address }}'
   register: results
 
 - ansible.builtin.debug:
-    var: results.stdout
+    var: results.stdout_lines
