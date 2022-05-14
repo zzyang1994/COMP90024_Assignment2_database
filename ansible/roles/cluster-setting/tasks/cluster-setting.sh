@@ -10,9 +10,17 @@ export cookie='a192aeb9904e6590849337933b000c99'
 echo "Master node is ${masternode}!"
 echo "Current node: $1!"
 
+if [ "$1" == "${masternode}" ]
+  then
+    curl -XPOST "http://${user}:${pass}@localhost:5984/_cluster_setup"\
+      --header "Content-Type: application/json"\
+      --data "{\"action\": \"enable_cluster\", \"bind_address\": \"0.0.0.0\",\
+             \"username\": \"${user}\", \"password\": \"${pass}\", \"node_count\": \"$(echo ${nodes[@]} | wc -w)\"}"
+fi
+
 if [ "$1" != "${masternode}" ]
   then
-    curl -XPOST "http://${user}:${pass}@${masternode}:5984/_cluster_setup" \
+    curl -XPOST "http://${user}:${pass}@${masternode}:5984/_cluster_setup"\
       --header "Content-Type: application/json"\
       --data "{\"action\": \"enable_cluster\", \"bind_address\":\"0.0.0.0\",\
              \"username\": \"${user}\", \"password\":\"${pass}\", \"port\": \"5984\",\

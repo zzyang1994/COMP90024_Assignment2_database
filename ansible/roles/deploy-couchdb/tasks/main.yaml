@@ -3,7 +3,6 @@
 - name: Run a script to start couchdb containers
   become: true
   ansible.builtin.script: anotherVer.sh '{{ ansible_default_ipv4.address }}'
-
   register: results
 
 - ansible.builtin.debug:
