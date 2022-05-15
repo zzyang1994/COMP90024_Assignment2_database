@@ -55,3 +55,22 @@ curl -XPUT "http://${user}:${pass}@localhost:5984/_node/couchdb@$1/_config/cors/
 curl -XPUT "http://${user}:${pass}@localhost:5984/_node/couchdb@$1/_config/cors/credentials" --data '"true"'
 curl -XPUT "http://${user}:${pass}@localhost:5984/_node/couchdb@$1/_config/cors/methods" --data '"GET, PUT, POST, HEAD, DELETE"'
 curl -XPUT "http://${user}:${pass}@localhost:5984/_node/couchdb@$1/_config/cors/headers" --data '"accept, authorization, content-type, origin, referer, x-csrf-token"'
+
+echo "==Setting MapReduce=="
+curl -XPUT "http://${user}:${pass}@localhost:5984/db/_design/my_ddoc"
+      --data '{"views":{"my_filter":{"map":
+              "function(doc) { if (doc.city == 'Melbourne') { emit(doc.suburb, 1); }}",
+              "reduce": "_count"}}}'
+curl -XPUT "http://${user}:${pass}@localhost:5984/db/_design/my_ddoc"
+      --data '{"views":{"my_filter":{"map":
+              "function(doc) { if (doc.city == 'Melbourne') { emit([doc.suburb, doc.related_to], 1);}}",
+              "reduce": "_count"}}}'
+curl -XPUT "http://${user}:${pass}@localhost:5984/db/_design/my_ddoc"
+      --data '{"views":{"my_filter":{"map":
+              "function(doc) { emit([doc.suburb, doc.created_at_year, doc.created_at_month, doc.created_at_day], doc.importance);}",
+              "reduce": "_sum"}}}'
+curl -XPUT "http://${user}:${pass}@localhost:5984/db/_design/my_ddoc"
+      --data '{"views":{"my_filter":{"map":
+              "function(doc) { emit([doc.suburb, doc.related_to], 1);}",
+              "reduce": "_count"}}}'
+  

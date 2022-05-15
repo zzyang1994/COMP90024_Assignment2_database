@@ -19,6 +19,8 @@ fi
 
 docker pull ibmcom/couchdb3:${VERSION}
 
+mkdir -p /usr/local/couchdb/data
+
 docker create\
   --name couchdb$1\
   --env COUCHDB_USER=${user}\
@@ -33,4 +35,4 @@ docker create\
 
 declare -a cont=(`docker ps --all | grep couchdb | cut -f1 -d' ' | xargs -n${size} -d'\n'`)
 
-docker start couchdb$1
+docker start couchdb$1 -v /usr/local/couchdb/data:/opt/couchdb/data
