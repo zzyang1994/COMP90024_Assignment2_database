@@ -16,10 +16,7 @@ if [ ! -z $(docker ps --all --filter "name=couchdb*" --quiet) ]
     docker rm $(docker ps --all --filter "name=couchdb*" --quiet)
 fi 
 
-
 docker pull ibmcom/couchdb3:${VERSION}
-
-mkdir -p /usr/local/couchdb/data
 
 docker create\
   --name couchdb$1\
@@ -31,9 +28,8 @@ docker create\
   --publish 5986:5986\
   --publish 4369:4369\
   --publish 9100-9200:9100-9200\
-  --volume /usr/local/couchdb/data:/opt/couchdb/data\
   ibmcom/couchdb3:${VERSION}
 
 declare -a cont=(`docker ps --all | grep couchdb | cut -f1 -d' ' | xargs -n${size} -d'\n'`)
 
-docker start couchdb$1 
+docker start couchdb$1
