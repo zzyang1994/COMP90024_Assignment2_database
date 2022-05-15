@@ -31,8 +31,9 @@ docker create\
   --publish 5986:5986\
   --publish 4369:4369\
   --publish 9100-9200:9100-9200\
+  --volume /usr/local/couchdb/data:/opt/couchdb/data\
   ibmcom/couchdb3:${VERSION}
 
 declare -a cont=(`docker ps --all | grep couchdb | cut -f1 -d' ' | xargs -n${size} -d'\n'`)
 
-docker start couchdb$1 -v /usr/local/couchdb/data:/opt/couchdb/data
+docker start couchdb$1 
